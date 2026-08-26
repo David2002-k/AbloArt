@@ -29,7 +29,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function profil()
+    public function admin()
     {
         return $this->hasOne(Admin::class);
     }
