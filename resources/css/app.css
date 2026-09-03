@@ -1,3 +1,47 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+	--ablo-ink: #18232d;
+	--ablo-muted: #71808b;
+	--ablo-cream: #f6f3ed;
+	--ablo-coral: #e87961;
+	--ablo-teal: #2d7775;
+}
+
+body {
+	min-height: 100vh;
+	color: var(--ablo-ink);
+	background: var(--ablo-cream);
+	font-family: Georgia, 'Times New Roman', serif;
+}
+
+.dashboard-shell {
+	min-height: 100vh;
+	background: radial-gradient(circle at 90% 0%, rgba(232, 121, 97, .14), transparent 28rem), linear-gradient(135deg, #f6f3ed 0%, #f3eee6 55%, #e7efeb 100%);
+}
+
+.dashboard-nav {
+	border-bottom: 1px solid rgba(24, 35, 45, .1);
+	background: rgba(246, 243, 237, .82);
+	backdrop-filter: blur(12px);
+}
+
+.brand-mark { color: var(--ablo-ink); font-size: 1.35rem; letter-spacing: .03em; }
+.brand-mark span { color: var(--ablo-coral); }
+.eyebrow { color: var(--ablo-teal); font-family: Arial, sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+.hero-title { max-width: 42rem; font-size: clamp(2.4rem, 6vw, 5rem); line-height: .98; }
+.hero-title em { color: var(--ablo-coral); font-style: normal; }
+.stat-card, .activity-panel { border: 1px solid rgba(24, 35, 45, .1); border-radius: .5rem; background: rgba(255, 255, 255, .67); box-shadow: 0 1rem 3rem rgba(24, 35, 45, .05); }
+.stat-card { transition: transform .2s ease, box-shadow .2s ease; }
+.stat-card:hover { transform: translateY(-4px); box-shadow: 0 1.25rem 3rem rgba(24, 35, 45, .1); }
+.stat-value { font-size: 2.4rem; line-height: 1; }
+.stat-label { color: var(--ablo-muted); font-family: Arial, sans-serif; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; }
+.activity-item { border-bottom: 1px solid rgba(24, 35, 45, .08); }
+.activity-item:last-child { border-bottom: 0; }
+.activity-dot { width: .65rem; height: .65rem; background: var(--ablo-coral); }
+.btn-coral { border: 0; color: #fff; background: var(--ablo-coral); }
+.btn-coral:hover { color: #fff; background: #d96550; }
