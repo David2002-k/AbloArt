@@ -16,6 +16,13 @@
             <a class="brand-mark navbar-brand" href="{{ route('admin.dashboard') }}">Ablo<span>Art</span></a>
             <div class="d-flex align-items-center gap-3 ms-auto">
                 <span class="d-none d-sm-inline text-secondary">{{ auth()->user()->email }}</span>
+                <a href="{{ route('profile.edit') }}" class="btn btn-outline-dark btn-sm d-inline-flex align-items-center" aria-label="Modifier mes informations" title="Modifier mes informations">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M12.854.146a.5.5 0 0 0-.708 0L3 9.293V13h3.707l9.146-9.146a.5.5 0 0 0 0-.708l-3-3zM4 10l7.5-7.5 2 2L6 12H4v-2z" />
+                        <path fill-rule="evenodd" d="M1.5 15a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 1 0V14h2.5a.5.5 0 0 1 0 1h-3z" />
+                    </svg>
+                    <span class="visually-hidden">Modifier mes informations</span>
+                </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn btn-outline-dark btn-sm">Déconnexion</button>
@@ -63,11 +70,24 @@
                         <span class="badge rounded-pill text-bg-success">En ligne</span>
                     </div>
                     <p class="text-secondary mb-4">Votre espace est prêt. Commencez par enrichir votre galerie ou consultez les dernières demandes de portraits.</p>
-                    <button class="btn btn-coral px-4" type="button" data-bs-toggle="collapse" data-bs-target="#quickActions" aria-expanded="false" aria-controls="quickActions">Afficher les actions rapides</button>
-                    <div class="collapse mt-4" id="quickActions">
-                        <div class="d-flex flex-wrap gap-2">
-                            <a href="#" class="btn btn-outline-dark">Gérer les portraits</a>
-                            <a href="#" class="btn btn-outline-dark">Voir les demandes</a>
+                    <div x-data="{ open: false }" class="mt-4">
+                        <button
+                            class="btn btn-coral px-4"
+                            type="button"
+                            @click="open = !open"
+                            :aria-expanded="open.toString()"
+                            aria-controls="quickActions"
+                        >
+                            <span x-text="open ? 'Masquer les actions rapides' : 'Afficher les actions rapides'"></span>
+                        </button>
+                        <div x-show="open" x-transition id="quickActions" class="mt-4" aria-label="Actions rapides">
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="{{ route('admin.portraits.index') }}" class="btn btn-outline-dark">Gérer les portraits</a>
+                                <a href="{{ route('admin.portraits.create') }}" class="btn btn-coral">Ajouter un portrait</a>
+                                <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-dark">Gérer les catégories</a>
+                                <a href="{{ route('admin.reseaux.index') }}" class="btn btn-outline-dark">Gérer les réseaux sociaux</a>
+                                <a href="{{ route('admin.demandes.index') }}" class="btn btn-outline-dark">Voir les demandes</a>
+                            </div>
                         </div>
                     </div>
                 </div>

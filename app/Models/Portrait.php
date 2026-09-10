@@ -6,6 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Portrait extends Model
 {
+    protected $fillable = [
+        'categorie_id',
+        'admin_id',
+        'description',
+        'image',
+        'video',
+        'date_realisation',
+    ];
+
+    protected $casts = [
+        'date_realisation' => 'date',
+    ];
+
     public function categorie()
     {
         return $this->belongsTo(Categorie::class);
@@ -14,9 +27,5 @@ class Portrait extends Model
     public function admin()
     {
         return $this->belongsTo(Admin::class);
-    }
-    public function temoignages()
-    {
-        return $this->hasMany(Temoignage::class);
     }
 }

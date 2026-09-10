@@ -6,8 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categorie extends Model
 {
-    public function portraits(){
+    protected $fillable = [
+        'nom',
+        'description',
+    ];
+
+    public function portraits()
+    {
         return $this->hasMany(Portrait::class);
     }
-    
 }
