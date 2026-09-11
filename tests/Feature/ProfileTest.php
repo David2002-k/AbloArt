@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 test('profile page is displayed', function () {
     $user = User::factory()->create();
@@ -104,4 +106,32 @@ test('correct password must be provided to delete account', function () {
         ->assertRedirect('/profile');
 
     $this->assertNotNull($user->fresh());
+});
+
+test('admin can delete their profile photo', function () {
+    Storage::fake('public');
+    $user = User::factory()->create();
+    $photo = 'admins/photos/profile.jpg';
+    Storage::disk('public')->put($photo, 'photo');
+    Admin::create(['user_id' => $user->id, 'photo' => $photo]);
+
+    $response = $this->actingAs($user)->delete(route('profile.photo.destroy'));
+
+    $response->assertRedirect(route('profile.edit'))->assertSessionHas('status', 'photo-deleted');
+    Storage::disk('public')->assertMissing($photo);
+    $this->assertDatabaseHas('admins', ['id' => $user->admin->id, 'photo' => null]);
+});
+
+test('admin can delete their cv', function () {
+    Storage::fake('public');
+    $user = User::factory()->create();
+    $cv = 'admins/cv/cv.pdf';
+    Storage::disk('public')->put($cv, 'cv');
+    Admin::create(['user_id' => $user->id, 'cv' => $cv]);
+
+    $response = $this->actingAs($user)->delete(route('profile.cv.destroy'));
+
+    $response->assertRedirect(route('profile.edit'))->assertSessionHas('status', 'cv-deleted');
+    Storage::disk('public')->assertMissing($cv);
+    $this->assertDatabaseHas('admins', ['id' => $user->admin->id, 'cv' => null]);
 });

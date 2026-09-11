@@ -3,5 +3,9 @@
 it('returns a successful response', function () {
     $response = $this->get('/');
 
-    $response->assertStatus(200);
+    $response
+        ->assertOk()
+        ->assertSee('Galerie')
+        ->assertSee('Demander un portrait')
+        ->assertSee('Se connecter');
 });

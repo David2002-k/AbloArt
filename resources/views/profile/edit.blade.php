@@ -22,6 +22,24 @@
                 </div>
             @endif
 
+            @if (session('status') === 'photo-deleted')
+                <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
+                    Photo de profil supprimée avec succès.
+                </div>
+            @endif
+
+            @if (session('status') === 'cv-deleted')
+                <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
+                    CV supprimé avec succès.
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             {{-- Informations personnelles --}}
             <div class="p-6 bg-white shadow-sm sm:rounded-lg">
 
@@ -156,6 +174,12 @@
                                     Photo actuelle
                                 </p>
 
+                                <form method="POST" action="{{ route('profile.photo.destroy') }}" class="mt-3">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-danger-button type="submit">Supprimer la photo</x-danger-button>
+                                </form>
+
                             </div>
                         @endif
 
@@ -186,12 +210,16 @@
                         @if ($admin?->cv)
                             <div class="mt-3 mb-3">
                                 <a
-                                    href="{{ asset('storage/' . $admin->cv) }}"
-                                    target="_blank"
+                                    href="{{ route('profile.cv') }}"
                                     class="text-blue-600 hover:underline"
                                 >
-                                    📄 Voir le CV actuel
+                                    Voir le CV actuel
                                 </a>
+                                <form method="POST" action="{{ route('profile.cv.destroy') }}" class="mt-3">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-danger-button type="submit">Supprimer le CV</x-danger-button>
+                                </form>
                             </div>
                         @endif
 

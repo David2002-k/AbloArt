@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Admin;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,12 +14,58 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function downloadCv()
+    {
+        $admin = Admin::query()->whereNotNull('cv')->first();
+
+        abort_unless($admin && Storage::disk('public')->exists($admin->cv), 404);
+
+        return Storage::disk('public')->download(
+            $admin->cv,
+            'CV-AbloArt.'.pathinfo($admin->cv, PATHINFO_EXTENSION),
+        );
+    }
+
     public function edit(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
             'admin' => $request->user()->admin,
         ]);
+    }
+
+    public function deletePhoto(Request $request): RedirectResponse
+    {
+        $admin = $request->user()->admin;
+
+        if (! $admin) {
+            return Redirect::route('profile.edit')->with('error', 'Profil administrateur introuvable.');
+        }
+
+        if ($admin->photo) {
+            Storage::disk('public')->delete($admin->photo);
+            $admin->photo = null;
+            $admin->save();
+        }
+
+        return Redirect::route('profile.edit')->with('status', 'photo-deleted');
+    }
+
+    public function deleteCv(Request $request): RedirectResponse
+    {
+        $admin = $request->user()->admin;
+
+        if (! $admin) {
+            return Redirect::route('profile.edit')->with('error', 'Profil administrateur introuvable.');
+        }
+
+        if ($admin->cv) {
+            Storage::disk('public')->delete($admin->cv);
+            $admin->cv = null;
+            $admin->save();
+        }
+
+        return Redirect::route('profile.edit')->with('status', 'cv-deleted');
     }
 
     public function update(ProfileUpdateRequest $request): RedirectResponse

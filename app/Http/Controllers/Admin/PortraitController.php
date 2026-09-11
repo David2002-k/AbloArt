@@ -146,16 +146,6 @@ class PortraitController extends Controller
      */
     public function destroy(Portrait $portrait)
     {
-        // Supprimer l'image
-        if ($portrait->image) {
-            Storage::disk('public')->delete($portrait->image);
-        }
-
-        // Supprimer la vidéo
-        if ($portrait->video) {
-            Storage::disk('public')->delete($portrait->video);
-        }
-
         $portrait->delete();
 
         return redirect()
