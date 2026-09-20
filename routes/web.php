@@ -43,6 +43,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         ->names('admin.reseaux');
     Route::get('/demandes', [DemandePortraitController::class, 'index'])->name('admin.demandes.index');
 });
+Route::patch('/admin/demandes/{demande}/statut', [
+    DemandePortraitController::class,
+    'updateStatut'
+])->name('admin.demandes.statut');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'admin'])

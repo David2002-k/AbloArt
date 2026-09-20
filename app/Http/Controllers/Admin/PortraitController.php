@@ -40,7 +40,7 @@ class PortraitController extends Controller
         $validated = $request->validate([
             'categorie_id' => ['required', 'exists:categories,id'],
             'description' => ['nullable', 'string'],
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'video' => ['nullable', 'file', 'mimes:mp4,mov,avi,webm', 'max:20480'],
             'date_realisation' => ['nullable', 'date'],
         ]);

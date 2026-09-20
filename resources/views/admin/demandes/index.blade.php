@@ -98,10 +98,55 @@
                                             @endif
                                         </td>
                                         <td class="px-4 py-4 align-top">
-                                            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold {{ $statusClasses[$demande->statut] ?? 'bg-gray-100 text-gray-600' }}">
-                                                {{ $statusLabels[$demande->statut] ?? ucfirst($demande->statut) }}
-                                            </span>
-                                        </td>
+
+    <div class="flex flex-col gap-2">
+
+        {{-- Statut actuel --}}
+        <span class="inline-flex w-fit rounded-full px-2.5 py-1 text-xs font-semibold
+            {{ $statusClasses[$demande->statut] ?? 'bg-gray-100 text-gray-600' }}">
+            {{ $statusLabels[$demande->statut] ?? ucfirst($demande->statut) }}
+        </span>
+
+        {{-- Modifier le statut --}}
+        <form
+            action="{{ route('admin.demandes.statut', $demande) }}"
+            method="POST"
+        >
+            @csrf
+            @method('PATCH')
+
+            <select
+                name="statut"
+                onchange="this.form.submit()"
+                class="rounded-md border-gray-300 text-xs shadow-sm focus:border-teal-500 focus:ring-teal-500"
+            >
+
+                <option value="en_attente"
+                    @selected($demande->statut === 'en_attente')>
+                    En attente
+                </option>
+
+                <option value="acceptee"
+                    @selected($demande->statut === 'acceptee')>
+                    Acceptée
+                </option>
+
+                <option value="refusee"
+                    @selected($demande->statut === 'refusee')>
+                    Refusée
+                </option>
+
+                <option value="terminee"
+                    @selected($demande->statut === 'terminee')>
+                    Terminée
+                </option>
+
+            </select>
+        </form>
+
+    </div>
+
+</td>
                                         <td class="whitespace-nowrap px-4 py-4 align-top text-sm text-gray-600">
                                             {{ $demande->created_at?->format('d/m/Y') ?? '-' }}
                                         </td>
