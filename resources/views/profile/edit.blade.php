@@ -34,6 +34,12 @@
                 </div>
             @endif
 
+            @if (session('status') === 'telephone-deleted')
+                <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
+                    Numéro de téléphone supprimé avec succès.
+                </div>
+            @endif
+
             @if (session('error'))
                 <div class="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
                     {{ session('error') }}
@@ -119,6 +125,10 @@
                             class="mt-2"
                             :messages="$errors->get('telephone')"
                         />
+
+                        @if ($admin?->telephone)
+                            <button type="submit" form="profile-telephone-delete" class="mt-2 text-sm font-semibold text-red-700 hover:text-red-900">Supprimer le numéro public</button>
+                        @endif
                     </div>
 
                     {{-- Adresse --}}
@@ -174,11 +184,7 @@
                                     Photo actuelle
                                 </p>
 
-                                <form method="POST" action="{{ route('profile.photo.destroy') }}" class="mt-3">
-                                    @csrf
-                                    @method('DELETE')
-                                    <x-danger-button type="submit">Supprimer la photo</x-danger-button>
-                                </form>
+                                <button type="submit" form="profile-photo-delete" class="mt-3 rounded-md bg-red-100 px-3 py-1.5 text-sm font-semibold text-red-700 hover:bg-red-200">Supprimer la photo</button>
 
                             </div>
                         @endif
@@ -215,11 +221,7 @@
                                 >
                                     Voir le CV actuel
                                 </a>
-                                <form method="POST" action="{{ route('profile.cv.destroy') }}" class="mt-3">
-                                    @csrf
-                                    @method('DELETE')
-                                    <x-danger-button type="submit">Supprimer le CV</x-danger-button>
-                                </form>
+                                <button type="submit" form="profile-cv-delete" class="mt-3 rounded-md bg-red-100 px-3 py-1.5 text-sm font-semibold text-red-700 hover:bg-red-200">Supprimer le CV</button>
                             </div>
                         @endif
 
@@ -253,6 +255,19 @@
 
                     </div>
 
+                </form>
+
+                <form id="profile-photo-delete" method="POST" action="{{ route('profile.photo.destroy') }}" class="hidden">
+                    @csrf
+                    @method('DELETE')
+                </form>
+                <form id="profile-cv-delete" method="POST" action="{{ route('profile.cv.destroy') }}" class="hidden">
+                    @csrf
+                    @method('DELETE')
+                </form>
+                <form id="profile-telephone-delete" method="POST" action="{{ route('profile.telephone.destroy') }}" class="hidden">
+                    @csrf
+                    @method('DELETE')
                 </form>
 
             </div>

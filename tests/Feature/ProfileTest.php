@@ -2,6 +2,7 @@
 
 use App\Models\Admin;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -134,4 +135,68 @@ test('admin can delete their cv', function () {
     $response->assertRedirect(route('profile.edit'))->assertSessionHas('status', 'cv-deleted');
     Storage::disk('public')->assertMissing($cv);
     $this->assertDatabaseHas('admins', ['id' => $user->admin->id, 'cv' => null]);
+});
+
+test('admin photo telephone and cv are saved and shown to public visitors', function () {
+    Storage::fake('public');
+    $user = User::factory()->create();
+    Admin::create(['user_id' => $user->id]);
+
+    $response = $this->actingAs($user)->patch(route('profile.update'), [
+        'name' => $user->name,
+        'email' => $user->email,
+        'telephone' => '+226 70 12 34 56',
+        'photo' => UploadedFile::fake()->image('profile.jpg'),
+        'cv' => UploadedFile::fake()->create('cv.pdf', 200, 'application/pdf'),
+    ]);
+
+    $response->assertRedirect(route('profile.edit'));
+
+    $admin = $user->admin->refresh();
+    expect($admin->photo)->toStartWith('admins/photos/')
+        ->and($admin->telephone)->toBe('+226 70 12 34 56')
+        ->and($admin->cv)->toStartWith('admins/cv/');
+
+    Storage::disk('public')->assertExists($admin->photo);
+    Storage::disk('public')->assertExists($admin->cv);
+
+    $this->actingAs($user)
+        ->get(route('profile.edit'))
+        ->assertOk()
+        ->assertSee('form="profile-photo-delete"', false)
+        ->assertSee('form="profile-cv-delete"', false)
+        ->assertSee('form="profile-telephone-delete"', false)
+        ->assertSee('id="profile-photo-delete"', false)
+        ->assertSee('id="profile-cv-delete"', false)
+        ->assertSee('id="profile-telephone-delete"', false);
+
+    $this->get(route('welcome'))
+        ->assertOk()
+        ->assertSee(asset('storage/'.$admin->photo))
+        ->assertSee('tel:+22670123456', false)
+        ->assertSee('Téléphone : +226 70 12 34 56')
+        ->assertSee(route('profile.cv'))
+        ->assertSee('Télécharger le CV');
+
+    $this->get(route('a-propos.index'))
+        ->assertOk()
+        ->assertSee(asset('storage/'.$admin->photo));
+
+    $this->get(route('profile.cv'))
+        ->assertDownload('CV-AbloArt.pdf');
+});
+
+test('admin can remove the public telephone number', function () {
+    $user = User::factory()->create();
+    Admin::create(['user_id' => $user->id, 'telephone' => '+226 70 12 34 56']);
+
+    $response = $this->actingAs($user)->delete(route('profile.telephone.destroy'));
+
+    $response->assertRedirect(route('profile.edit'))
+        ->assertSessionHas('status', 'telephone-deleted');
+
+    $this->assertDatabaseHas('admins', [
+        'id' => $user->admin->id,
+        'telephone' => null,
+    ]);
 });

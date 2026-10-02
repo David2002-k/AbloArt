@@ -3,8 +3,10 @@
 use App\Http\Controllers\Admin\CategorieController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DemandePortraitController;
+use App\Http\Controllers\Admin\MessageController as AdminMessageController;
 use App\Http\Controllers\Admin\PortraitController;
 use App\Http\Controllers\Admin\ReseauSocialController;
+use App\Http\Controllers\Admin\TemoignageController as AdminTemoignageController;
 use App\Http\Controllers\AProposController;
 use App\Http\Controllers\DemandePortraitController as PublicDemandePortraitController;
 use App\Http\Controllers\GalerieController;
@@ -42,12 +44,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         ->parameters(['reseaux' => 'reseau'])
         ->names('admin.reseaux');
     Route::get('/demandes', [DemandePortraitController::class, 'index'])->name('admin.demandes.index');
+    Route::patch('/demandes/{demande}/statut', [DemandePortraitController::class, 'updateStatut'])->name('admin.demandes.statut');
+    Route::get('/demandes/{demande}/photo', [DemandePortraitController::class, 'downloadPhoto'])->name('admin.demandes.photo');
+    Route::get('/messages', [AdminMessageController::class, 'index'])->name('admin.messages.index');
+    Route::patch('/messages/{message}', [AdminMessageController::class, 'update'])->name('admin.messages.update');
+    Route::get('/temoignages', [AdminTemoignageController::class, 'index'])->name('admin.temoignages.index');
+    Route::patch('/temoignages/{temoignage}', [AdminTemoignageController::class, 'update'])->name('admin.temoignages.update');
 });
-Route::patch('/admin/demandes/{demande}/statut', [
-    DemandePortraitController::class,
-    'updateStatut'
-])->name('admin.demandes.statut');
-
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'admin'])
     ->name('dashboard');
@@ -57,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.destroy');
     Route::delete('/profile/cv', [ProfileController::class, 'deleteCv'])->name('profile.cv.destroy');
+    Route::delete('/profile/telephone', [ProfileController::class, 'deleteTelephone'])->name('profile.telephone.destroy');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

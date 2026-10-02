@@ -68,6 +68,20 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'cv-deleted');
     }
 
+    public function deleteTelephone(Request $request): RedirectResponse
+    {
+        $admin = $request->user()->admin;
+
+        if (! $admin) {
+            return Redirect::route('profile.edit')->with('error', 'Profil administrateur introuvable.');
+        }
+
+        $admin->telephone = null;
+        $admin->save();
+
+        return Redirect::route('profile.edit')->with('status', 'telephone-deleted');
+    }
+
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();

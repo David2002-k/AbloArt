@@ -34,7 +34,7 @@
         </div>
     </header>
     <main class="container mx-auto px-4 py-20">
-        <section class="mx-auto max-w-5xl py-16 text-center">
+        <section class="mx-auto max-w-5xl py-16 text-center {{ $admin?->photo ? 'home-intro-with-photo' : '' }}">
             <div>
                 <p class="mb-3 text-sm font-semibold uppercase tracking-widest text-teal-700">Atelier de portraits</p>
                 <h1 class="mb-5 text-5xl font-bold text-gray-900">Bienvenue chez AbloArt</h1>
@@ -45,6 +45,11 @@
                 <a href="{{ route('temoignages.index') }}" class="rounded-md bg-gray-900 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-700">Voir les témoignages</a>
                 </div>
             </div>
+            @if ($admin?->photo)
+                <div class="home-intro-photo">
+                    <img src="{{ asset('storage/'.$admin->photo) }}" alt="Photo de {{ $admin->user?->name ?? 'AbloArt' }}" loading="eager">
+                </div>
+            @endif
         </section>
     </main>
 
@@ -59,7 +64,7 @@
             </div>
 
             @if ($portraits->isNotEmpty())
-                <div id="homePortraitCarousel" class="carousel slide portrait-carousel vertical-carousel" data-bs-ride="carousel" data-bs-interval="4500">
+                <div id="homePortraitCarousel" class="carousel slide portrait-carousel home-portrait-carousel" data-bs-ride="carousel" data-bs-interval="3000" data-bs-pause="false">
                     <div class="carousel-indicators">
                         @foreach ($portraits as $portrait)
                             <button type="button" data-bs-target="#homePortraitCarousel" data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}" aria-label="Portrait {{ $loop->iteration }}"></button>
@@ -68,7 +73,7 @@
                     <div class="carousel-inner">
                         @foreach ($portraits as $portrait)
                             <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                <div class="mx-auto max-w-sm overflow-hidden rounded-lg bg-white shadow-sm">
+                                <div class="home-portrait-card mx-auto overflow-hidden rounded-lg bg-white shadow-sm">
                                     <div class="gallery-media">
                                         @if ($portrait->video)
                                             <video controls preload="metadata" poster="{{ $portrait->image ? asset('storage/'.$portrait->image) : '' }}"><source src="{{ asset('storage/'.$portrait->video) }}"></video>
@@ -137,16 +142,19 @@
                 <a href="{{ route('welcome') }}" class="home-wordmark text-white" aria-label="AbloArt, accueil">Ablo<span>Art</span><i></i></a>
                 <p class="mt-3 max-w-xs text-sm leading-6 text-gray-300">Des portraits sensibles et personnalisés, réalisés avec soin par AbloArt.</p>
                 @if ($admin?->cv)
-                    <a href="{{ route('profile.cv') }}" class="mt-4 inline-block text-sm text-teal-300 hover:text-white">Télécharger le CV d'AbloArt ↗</a>
+                    <a href="{{ route('profile.cv') }}" class="footer-cv-link mt-4 inline-flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 12v6m-3-3 3 3 3-3"/></svg>
+                        Télécharger le CV d'AbloArt
+                    </a>
                 @endif
             </div>
 
             <div>
                 <h2 class="mb-3 text-sm font-semibold uppercase tracking-widest text-teal-300">Nous contacter</h2>
                 <div class="space-y-2 text-sm text-gray-300">
-                    <a href="mailto:{{ $admin?->user?->email ?? 'bonjour@abloart.fr' }}" class="block hover:text-white">Email : {{ $admin?->user?->email ?? 'bonjour@abloart.fr' }}</a>
+                    <a href="mailto:{{ $admin?->user?->email ?? 'bonjour@abloart.fr' }}" class="footer-contact-link">Email : {{ $admin?->user?->email ?? 'bonjour@abloart.fr' }}</a>
                     @if ($admin?->telephone)
-                        <a href="tel:{{ $admin->telephone }}" class="block hover:text-white">Téléphone : {{ $admin->telephone }}</a>
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $admin->telephone) }}" class="footer-contact-link">Téléphone : {{ $admin->telephone }}</a>
                     @endif
                     @if ($admin?->adresse)
                         <p class="mb-0">Adresse : {{ $admin->adresse }}</p>
@@ -158,8 +166,8 @@
                 <h2 class="mb-3 text-sm font-semibold uppercase tracking-widest text-teal-300">Nos réseaux sociaux</h2>
                 <div class="flex flex-wrap gap-2">
                     @forelse ($reseaux as $reseau)
-                        <a href="{{ $reseau->url }}" target="_blank" rel="noopener noreferrer" class="rounded-md border border-gray-600 px-3 py-2 text-sm text-gray-200 hover:border-teal-300 hover:text-white">
-                            {{ $reseau->icone ?: $reseau->nom }}
+                        <a href="{{ $reseau->url }}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="{{ $reseau->nom }}" title="{{ $reseau->nom }}">
+                            <x-social-network-icon :reseau="$reseau" />
                         </a>
                     @empty
                         <span class="text-sm text-gray-400">Réseaux sociaux bientôt disponibles.</span>

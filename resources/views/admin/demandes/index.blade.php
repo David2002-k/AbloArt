@@ -17,6 +17,10 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto space-y-6 sm:px-6 lg:px-8">
+            @if (session('success'))
+                <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800" role="status">{{ session('success') }}</div>
+            @endif
+
             <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
                 <div class="flex flex-col gap-4 border-b border-gray-100 px-6 py-5 sm:flex-row sm:items-end sm:justify-between">
                     <div>
@@ -90,9 +94,13 @@
                                         </td>
                                         <td class="px-4 py-4 align-top">
                                             @if ($demande->photo_reference)
-                                                <a href="{{ asset('storage/' . $demande->photo_reference) }}" target="_blank" class="text-sm font-semibold text-teal-700 hover:underline">
-                                                    Voir la photo
-                                                </a>
+                                                <div class="flex flex-col items-start gap-2">
+                                                    <a href="{{ asset('storage/' . $demande->photo_reference) }}" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-teal-700 hover:underline">Voir la photo</a>
+                                                    <a href="{{ route('admin.demandes.photo', $demande) }}" class="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-semibold text-gray-700 transition hover:border-teal-600 hover:text-teal-700" aria-label="Télécharger la photo de référence de {{ $demande->nom }}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 14.5a1 1 0 011 1v1h12v-1a1 1 0 112 0v2a1 1 0 01-1 1H3a1 1 0 01-1-1v-2a1 1 0 011-1zm6.293-1.207a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.172V3a1 1 0 10-2 0v7.172L7.707 8.879a1 1 0 00-1.414 1.414l3 3z" clip-rule="evenodd" /></svg>
+                                                        Télécharger
+                                                    </a>
+                                                </div>
                                             @else
                                                 <span class="text-sm text-gray-400">Aucune</span>
                                             @endif

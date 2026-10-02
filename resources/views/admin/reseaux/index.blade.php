@@ -24,7 +24,7 @@
                         @foreach ($reseaux as $reseau)
                             <div class="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
                                 <div class="flex items-center gap-4">
-                                    <div class="flex h-11 w-11 items-center justify-center rounded-full bg-teal-50 text-sm font-bold text-teal-700">{{ strtoupper(substr($reseau->nom, 0, 1)) }}</div>
+                                    <div class="social-admin-icon" aria-hidden="true"><x-social-network-icon :reseau="$reseau" /></div>
                                     <div>
                                         <h4 class="font-semibold text-gray-900">{{ $reseau->nom }}</h4>
                                         <a href="{{ $reseau->url }}" target="_blank" rel="noopener" class="text-sm text-teal-700 hover:underline">{{ $reseau->url }}</a>

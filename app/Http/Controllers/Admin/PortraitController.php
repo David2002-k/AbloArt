@@ -7,6 +7,7 @@ use App\Models\Categorie;
 use App\Models\Portrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class PortraitController extends Controller
 {
@@ -40,7 +41,13 @@ class PortraitController extends Controller
         $validated = $request->validate([
             'categorie_id' => ['required', 'exists:categories,id'],
             'description' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'image' => [
+                Rule::requiredIf(fn (): bool => ! $request->files->has('image') && ! $request->files->has('video')),
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:5120',
+            ],
             'video' => ['nullable', 'file', 'mimes:mp4,mov,avi,webm', 'max:20480'],
             'date_realisation' => ['nullable', 'date'],
         ]);
@@ -48,9 +55,9 @@ class PortraitController extends Controller
         // Récupérer l'administrateur connecté
         $admin = $request->user()->admin;
 
-        // Enregistrer l'image
-        $imagePath = $request->file('image')
-            ->store('portraits/images', 'public');
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('portraits/images', 'public')
+            : null;
 
         // Enregistrer la vidéo si elle existe
         $videoPath = null;

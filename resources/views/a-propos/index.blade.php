@@ -10,7 +10,7 @@
     <body class="home-page">
         <nav class="navbar navbar-expand-lg home-navbar sticky-top">
             <div class="container d-flex justify-content-between align-items-center">
-                <a class="navbar-brand home-brand" href="{{ route('welcome') }}">Ablo<span>Art</span><i></i></a>
+                <a class="navbar-brand home-brand" href="{{ route('welcome') }}">Ablo<span>Art</span><i></i></a> 
                 <a class="btn btn-outline-dark btn-sm" href="{{ route('welcome') }}">Retour à l'accueil</a>
             </div>
         </nav>
@@ -19,7 +19,7 @@
             <section class="row align-items-center g-5 py-lg-5">
                 <div class="col-lg-7">
                     <p class="eyebrow mb-3">À propos de nous</p>
-                    <h1 class="hero-title mb-4">L'art de raconter<br><em>ce qui compte.</em></h1>
+                    <h1 class="hero-title mb-4">L'art de raconter<br><em>ce qui compte.</em></h1> 
                     <p class="lead text-secondary">AbloArt crée des portraits personnalisés avec sensibilité et précision. Chaque création transforme un visage, un souvenir ou une émotion en une pièce unique à conserver.</p>
                 </div>
                 <div class="col-lg-5 text-center">

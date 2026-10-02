@@ -118,11 +118,10 @@
                             type="file"
                             accept=".jpg,.jpeg,.png,.webp"
                             class="mt-1 block w-full"
-                            required
                         >
 
                         <p class="mt-1 text-sm text-gray-500">
-                            JPG, JPEG, PNG ou WEBP — 5 Mo maximum.
+                            Facultatif si une vidéo est ajoutée. JPG, JPEG, PNG ou WEBP — 5 Mo maximum.
                         </p>
 
                         @error('image')
@@ -152,7 +151,7 @@
                         >
 
                         <p class="mt-1 text-sm text-gray-500">
-                            Facultatif. MP4, MOV, AVI ou WEBM — 20 Mo maximum.
+                            Ajoutez une image, une vidéo, ou les deux. MP4, MOV, AVI ou WEBM — 20 Mo maximum.
                         </p>
 
                         @error('video')

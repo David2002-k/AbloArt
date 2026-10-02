@@ -14,25 +14,6 @@ class DemandePortraitController extends Controller
         return view('demandes.create');
     }
 
-    public function updateStatut(Request $request, DemandePortrait $demande)
-{
-    $validated = $request->validate([
-        'statut' => [
-            'required',
-            'in:en_attente,acceptee,refusee,terminee',
-        ],
-    ]);
-
-    $demande->update([
-        'statut' => $validated['statut'],
-    ]);
-
-    return back()->with(
-        'success',
-        'Le statut de la demande a été mis à jour.'
-    );
-}
-
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([

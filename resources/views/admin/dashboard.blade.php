@@ -108,7 +108,7 @@
                     <p class="eyebrow mb-2">Boîte de réception</p>
                     <h2 id="messages-title" class="h4 mb-0">Messages des visiteurs</h2>
                 </div>
-                <span class="badge rounded-pill text-bg-light">{{ $messages->count() }} récent(s)</span>
+                <a href="{{ route('admin.messages.index') }}" class="btn btn-sm btn-outline-dark">Voir tous les messages</a>
             </div>
 
             @forelse ($messages as $message)
@@ -172,6 +172,8 @@
                                 <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-dark">Gérer les catégories</a>
                                 <a href="{{ route('admin.reseaux.index') }}" class="btn btn-outline-dark">Gérer les réseaux sociaux</a>
                                 <a href="{{ route('admin.demandes.index') }}" class="btn btn-outline-dark">Voir les demandes</a>
+                                <a href="{{ route('admin.temoignages.index') }}" class="btn btn-outline-dark">Modérer les témoignages</a>
+                                <a href="{{ route('admin.messages.index') }}" class="btn btn-outline-dark">Ouvrir la boîte de réception</a>
                             </div>
                         </div>
                     </div>
